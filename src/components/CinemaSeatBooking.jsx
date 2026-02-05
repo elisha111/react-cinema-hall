@@ -196,7 +196,18 @@ const CinemaSeatBooking = (props) => {
               </span>
             </div>
           ))}
+
+          <div className="flex items-center">
+            <div className="w-6 h-6 border-2 rounded-t-lg mr-2 bg-green-500 border-green-600"></div>
+            <span className="text-sm">Selected</span>
+          </div>
+
+          <div className="flex items-center">
+            <div className="w-6 h-6 border-2 rounded-t-lg mr-2 bg-gray-400 border-gray-500"></div>
+            <span className="text-sm">Booked</span>
+          </div>
         </div>
+
         {/* summary */}
         {/* book button */}
       </div>
