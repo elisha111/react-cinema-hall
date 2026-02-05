@@ -14,7 +14,7 @@ const CinemaSeatBooking = (props) => {
       vip: { name: "VIP", price: 350, rows: [6, 7] },
     },
     bookedSeats = [],
-    currency = "USD",
+    currency = "$",
     onBookingComplete = () => {},
     title = "Cinema Hall Booking",
     subtitle = "Select your preferred seats",
@@ -131,6 +131,16 @@ const CinemaSeatBooking = (props) => {
     );
   };
 
+  const uniqueSeatTypes = Object.entries(seatTypes).map(
+    ([type, config], index) => {
+      return {
+        type,
+        color: colors[index % colors.length],
+        ...config,
+      };
+    }
+  );
+
   return (
     <div className="w-full min-h-screen bg-gray-50 p-4">
       <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6">
@@ -172,6 +182,21 @@ const CinemaSeatBooking = (props) => {
         </div>
 
         {/* legend */}
+        <div className="flex flex-wrap justify-center gap-6 mb-6 p-4 bg-gray-50 rounded-lg">
+          {uniqueSeatTypes.map((seatType) => (
+            <div key={seatType.type} className="flex items-center">
+              <div
+                className={`w-6 h-6 border-2 rounded-t-lg mr-2 ${
+                  getColorClass(seatType.color) || "bg-blue-100 border-blue-300"
+                }`}
+              ></div>
+              <span className="text-sm">
+                {seatType.name} ({currency}
+                {seatType.price})
+              </span>
+            </div>
+          ))}
+        </div>
         {/* summary */}
         {/* book button */}
       </div>
