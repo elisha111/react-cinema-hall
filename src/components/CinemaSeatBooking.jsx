@@ -26,7 +26,7 @@ const CinemaSeatBooking = (props) => {
     "yellow",
     "green",
     "red",
-    "ingigo",
+    "indigo",
     "pink",
     "gray",
   ];
