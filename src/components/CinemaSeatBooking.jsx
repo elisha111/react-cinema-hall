@@ -104,14 +104,36 @@ const CinemaSeatBooking = (props) => {
     }
 
     if (seat.selected) {
-      return `${baseClass} bg-gray-500 border-gray-600 text-white transform scale-110`;
+      return `${baseClass} bg-green-500 border-green-600 text-white transform scale-110`;
     }
 
     return `${baseClass} ${getColorClass(seat.color)}`;
   };
 
   const handleSeatClick = (rowIndex, seatIndex) => {
-    // TODO: click logic
+    const seat = seats[rowIndex][seatIndex];
+
+    if (seat.status === "booked") return;
+
+    const isCurrentlySelected = seat.selected;
+
+    setSeats((prevSeats) => {
+      return prevSeats.map((row, rIdx) =>
+        row.map((s, sIdx) => {
+          if (rIdx === rowIndex && sIdx === seatIndex) {
+            return { ...s, selected: !s.selected };
+          }
+
+          return s;
+        }),
+      );
+    });
+
+    if (isCurrentlySelected) {
+      setSelectedSeats((prev) => prev.filter((s) => s.id !== seat.id));
+    } else {
+      setSelectedSeats((prev) => [...prev, seat]);
+    }
   };
 
   const renderSeatSection = (seatRow, startIndex, endIndex) => {
@@ -138,7 +160,7 @@ const CinemaSeatBooking = (props) => {
         color: colors[index % colors.length],
         ...config,
       };
-    }
+    },
   );
 
   return (
@@ -174,7 +196,7 @@ const CinemaSeatBooking = (props) => {
                 {renderSeatSection(
                   row,
                   layout.aislePosition,
-                  layout.seatsPerRow
+                  layout.seatsPerRow,
                 )}
               </div>
             ))}
