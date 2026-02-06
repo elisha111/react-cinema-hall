@@ -45,7 +45,7 @@ const CinemaSeatBooking = (props) => {
     }
 
     const [firstType, firstConfig] = seatTypesEntries[0];
-    return { type: firstConfig, color: colors[0], ...firstConfig };
+    return { type: firstType, color: colors[0], ...firstConfig };
   };
 
   const initializeSeats = useMemo(() => {
@@ -292,6 +292,7 @@ const CinemaSeatBooking = (props) => {
             <p className="text-gray-500">No seats selected</p>
           )}
         </div>
+        
         {/* book button */}
         <button
           onClick={hendleBooking}
