@@ -157,6 +157,40 @@ const CinemaSeatBooking = (props) => {
     return selectedSeats.reduce((total, seat) => total + seat.price, 0);
   };
 
+  const hendleBooking = () => {
+    if (selectedSeats.length === 0) {
+      alert("Please select at least one seat");
+      return;
+    }
+
+    setSeats((prevSeats) => {
+      return prevSeats.map((row) =>
+        row.map((seat) => {
+          if (selectedSeats.some((selected) => selected.id === seat.id)) {
+            return { ...seat, status: "booked", selected: false };
+          }
+
+          return seat;
+        })
+      );
+    });
+
+    // call callback
+    onBookingComplete({
+      seat: selectedSeats,
+      totalPrice: getTotalPrice(),
+      seatIds: selectedSeats.map((seat) => seat.id),
+    });
+
+    alert(
+      `Successfully booked ${
+        selectedSeats.length
+      } seat(s) for ${currency}${getTotalPrice()}`
+    );
+
+    setSelectedSeats([]);
+  };
+
   const uniqueSeatTypes = Object.entries(seatTypes).map(
     ([type, config], index) => {
       return {
@@ -237,28 +271,44 @@ const CinemaSeatBooking = (props) => {
         {/* booking summary */}
         <div className="bg-gray-50 rounded-lg p-4 mb-4">
           <h3 className="font-bold text-lg mb-2">Booking Summary</h3>
+          {selectedSeats.length > 0 ? (
+            <div>
+              <p className="mb-2">
+                Selected Seats:{" "}
+                <span className="font-medium">
+                  {selectedSeats.map((seat) => seat.id).join(", ")}
+                </span>
+              </p>
+              <p className="mb-2">
+                Number of Seats:{" "}
+                <span className="font-medium">{selectedSeats.length}</span>
+              </p>
+              <p className="text-xl font-bold text-green-600">
+                Total: {currency}
+                {getTotalPrice()}
+              </p>
+            </div>
+          ) : (
+            <p className="text-gray-500">No seats selected</p>
+          )}
         </div>
-        {selectedSeats.length > 0 ? (
-          <div>
-            <p className="mb-2">
-              Selected Seats:{" "}
-              <span className="font-medium">
-                {selectedSeats.map((seat) => seat.id).join(", ")}
-              </span>
-            </p>
-            <p className="mb-2">
-              Number of Seats:{" "}
-              <span className="font-medium">{selectedSeats.length}</span>
-            </p>
-            <p className="text-xl font-bold text-green-600">
-              Total: {currency}
-              {getTotalPrice()}
-            </p>
-          </div>
-        ) : (
-          <p className="text-gray-500">No seats selected</p>
-        )}
         {/* book button */}
+        <button
+          onClick={hendleBooking}
+          type="button"
+          disabled={selectedSeats.length === 0}
+          className={`w-full py-3 px-6 rounded-lg font-bold text-lg transition-all duration-200 ${
+            selectedSeats.length > 0
+              ? "bg-green-500 hover:bg-green-600 text-white transform hover:scale-105"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+        >
+          {selectedSeats.length > 0
+            ? `Book ${
+                selectedSeats.length
+              } Seat(s) - ${currency}${getTotalPrice()}`
+            : `Select Seats to Book`}
+        </button>
       </div>
     </div>
   );
