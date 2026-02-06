@@ -125,7 +125,7 @@ const CinemaSeatBooking = (props) => {
           }
 
           return s;
-        }),
+        })
       );
     });
 
@@ -153,6 +153,10 @@ const CinemaSeatBooking = (props) => {
     );
   };
 
+  const getTotalPrice = () => {
+    return selectedSeats.reduce((total, seat) => total + seat.price, 0);
+  };
+
   const uniqueSeatTypes = Object.entries(seatTypes).map(
     ([type, config], index) => {
       return {
@@ -160,7 +164,7 @@ const CinemaSeatBooking = (props) => {
         color: colors[index % colors.length],
         ...config,
       };
-    },
+    }
   );
 
   return (
@@ -196,7 +200,7 @@ const CinemaSeatBooking = (props) => {
                 {renderSeatSection(
                   row,
                   layout.aislePosition,
-                  layout.seatsPerRow,
+                  layout.seatsPerRow
                 )}
               </div>
             ))}
@@ -230,7 +234,30 @@ const CinemaSeatBooking = (props) => {
           </div>
         </div>
 
-        {/* summary */}
+        {/* booking summary */}
+        <div className="bg-gray-50 rounded-lg p-4 mb-4">
+          <h3 className="font-bold text-lg mb-2">Booking Summary</h3>
+        </div>
+        {selectedSeats.length > 0 ? (
+          <div>
+            <p className="mb-2">
+              Selected Seats:{" "}
+              <span className="font-medium">
+                {selectedSeats.map((seat) => seat.id).join(", ")}
+              </span>
+            </p>
+            <p className="mb-2">
+              Number of Seats:{" "}
+              <span className="font-medium">{selectedSeats.length}</span>
+            </p>
+            <p className="text-xl font-bold text-green-600">
+              Total: {currency}
+              {getTotalPrice()}
+            </p>
+          </div>
+        ) : (
+          <p className="text-gray-500">No seats selected</p>
+        )}
         {/* book button */}
       </div>
     </div>
